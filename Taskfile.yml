@@ -1,0 +1,40 @@
+version: '3'
+
+tasks:
+  create-venv:
+    desc: Create a python virtual environment
+    status:
+      - test -d .venv
+
+  install-deps:
+    desc: Install Python dependencies
+    preconditions:
+      - test -f .venv/Scripts/activate
+    cmds:
+      - cmd: cd .venv/Scripts && activate && cd ../../ && pip install -r "requirements.txt"
+
+  notebook:
+    desc: Start Jupyter Notebook server
+    cmds:
+      - jupyter notebook
+
+  lint:
+    desc: Run code linting
+    cmds:
+      - flake8 .
+
+  test:
+    desc: Run tests
+    cmds:
+      - pytest
+
+  clean:
+    desc: Clean temporary files
+    cmds:
+      - rm -rf __pycache__ .pytest_cache .ipynb_checkpoints
+
+  setup:
+    desc: Setup environment
+    cmds:
+      - cmd: py -m venv .venv
+      - task: install-dependencies

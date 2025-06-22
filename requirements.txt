@@ -1,0 +1,13 @@
+pytest
+
+# Math and Data Science Libraries
+numpy
+scipy
+pandas
+matplotlib
+
+# Machine Learning Libraries
+scikit-learn
+# Deep Learning Libraries
+tensorflow[and-cuda]
+keras
