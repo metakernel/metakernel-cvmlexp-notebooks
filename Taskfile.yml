@@ -1,5 +1,8 @@
 version: '3'
 
+vars:
+  WITH_CUDA: '{{.WITH_CUDA| default false}}'
+
 tasks:
   create-venv:
     desc: Create a python virtual environment
@@ -11,7 +14,7 @@ tasks:
     preconditions:
       - test -f .venv/Scripts/activate
     cmds:
-      - cmd: cd .venv/Scripts && activate && cd ../../ && pip install -r "requirements.txt"
+      - cmd: 'cd .venv/Scripts && activate && cd ../../ && pip install -r tensorflow-{{if eq .WITH_CUDA "true"}}{{"gpu"}}{{else}}{{"cpu"}}{{end}}-requirements.txt'
 
   notebook:
     desc: Start Jupyter Notebook server
