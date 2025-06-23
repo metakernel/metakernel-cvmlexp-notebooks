@@ -4,15 +4,23 @@ vars:
   WITH_CUDA: '{{.WITH_CUDA| default false}}'
 
 tasks:
-  create-venv:
+  venv:create:
     desc: Create a python virtual environment
+    cmds:
+      - cmd: py -m venv .venv
     status:
-      - test -d .venv
+      - test -f .venv/Scripts/activate
+
+  venv:
+    desc: Start the virtual environment
+    deps: [venv:create]
+    cmd: cd .venv/Scripts && activate
+    interactive: true
+
 
   install-deps:
     desc: Install Python dependencies
-    preconditions:
-      - test -f .venv/Scripts/activate
+    deps: [venv:create]
     cmds:
       - cmd: 'cd .venv/Scripts && activate && cd ../../ && pip install -r tensorflow-{{if eq .WITH_CUDA "true"}}{{"gpu"}}{{else}}{{"cpu"}}{{end}}-requirements.txt'
 
