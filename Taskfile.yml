@@ -8,14 +8,22 @@ tasks:
     desc: Create a python virtual environment
     cmds:
       - cmd: py -m venv .venv
+        platforms: [windows]
+      - cmd: python3 -m venv .venv
+        platforms: [linux]
     status:
       - test -f .venv/Scripts/activate
 
   venv:
     desc: Start the virtual environment
     deps: [venv:create]
-    cmd: cd .venv/Scripts && activate
-    interactive: true
+    cmds: 
+      - cmd: cd .venv/Scripts && activate
+        platforms: [windows]
+        interactive: true
+      - cmd: bash -c -i "source  .venv/bin/activate"
+        interactive: true
+        platforms: [linux]
 
 
   install-deps:
@@ -23,6 +31,9 @@ tasks:
     deps: [venv:create]
     cmds:
       - cmd: 'cd .venv/Scripts && activate && cd ../../ && pip install -r tensorflow-{{if eq .WITH_CUDA "true"}}{{"gpu"}}{{else}}{{"cpu"}}{{end}}-requirements.txt'
+        platforms: [windows]
+      - cmd: 'bash -c -i "source .venv/bin/activate" && pip install -r tensorflow-{{if eq .WITH_CUDA "true"}}{{"gpu"}}{{else}}{{"cpu"}}{{end}}-requirements.txt'
+        platforms: [linux]
 
   notebook:
     desc: Start Jupyter Notebook server

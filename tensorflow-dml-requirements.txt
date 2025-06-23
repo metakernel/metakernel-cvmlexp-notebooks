@@ -1,0 +1,7 @@
+# This file contains the requirements for TensorFlow with DirectML support.
+# WARNING: tensorflow-directml-plugin is not compatible with python 3.11+
+
+-r base-requirements.txt
+
+tensorflow[and-cpu]
+tensorflow-directml-plugin
